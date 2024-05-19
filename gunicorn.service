@@ -1,0 +1,18 @@
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/var/lib/jenkins/workspace/jenkins-cicd/jenkinscicd
+ExecStart=/var/lib/jenkins/workspace/jenkins-cicd/env/bin/gunicorn \
+          --error-logfile /var/lib/jenkins/workspace/jenkins-cicd/error.log \
+          --workers 3 \
+          --bind unix:/run/gunicorn.sock \
+          --capture-output --log-level debug \
+          jenkinscicd.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
